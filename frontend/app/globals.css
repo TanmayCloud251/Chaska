@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FFFBF5;
+  --foreground: #2C1810;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-nunito), system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* Hide scrollbar for category selector horizontal scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
