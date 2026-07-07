@@ -2,19 +2,19 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Map, User } from 'lucide-react';
+import { Compass, Map, User } from 'lucide-react';
 
 export default function BottomNav() {
   const pathname = usePathname();
 
   const navItems = [
-    { label: 'Feed', href: '/', icon: Home },
+    { label: 'Feed', href: '/', icon: Compass },
     { label: 'Map', href: '/map', icon: Map },
     { label: 'Profile', href: '/profile', icon: User },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border py-2 shadow-[0_-2px_10px_rgba(44,24,16,0.05)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-border/60 py-2 shadow-[0_-4px_20px_rgba(44,24,16,0.03)]">
       <div className="max-w-md mx-auto flex justify-around items-center px-4">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -23,16 +23,19 @@ export default function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 ${
+              className={`flex flex-col items-center gap-0.5 py-1 px-3 relative transition-all duration-200 ${
                 isActive 
-                  ? 'text-primary scale-105' 
-                  : 'text-muted-text hover:text-foreground hover:scale-102'
+                  ? 'text-primary-container scale-102' 
+                  : 'text-muted-text hover:text-foreground'
               }`}
             >
-              <Icon size={24} strokeWidth={isActive ? 2.5 : 1.75} />
-              <span className={`text-[11px] font-semibold tracking-wide ${isActive ? 'text-primary font-bold' : ''}`}>
+              <Icon size={22} strokeWidth={isActive ? 2.5 : 1.75} />
+              <span className={`text-[10px] font-bold tracking-wide ${isActive ? 'text-primary-container' : ''}`}>
                 {item.label}
               </span>
+              {isActive && (
+                <span className="w-1.5 h-1.5 bg-primary-container rounded-full mt-0.5" />
+              )}
             </Link>
           );
         })}

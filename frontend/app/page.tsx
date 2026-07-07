@@ -5,19 +5,19 @@ import Link from 'next/link';
 import { useAuth } from '../lib/auth';
 import { api } from '../lib/api';
 import FeedCard from '../components/FeedCard';
-import { Flame, Search, MapPin, SlidersHorizontal, Plus, Loader2 } from 'lucide-react';
+import { Search, MapPin, SlidersHorizontal, Plus, Loader2 } from 'lucide-react';
 
 export default function FeedScreen() {
   const { user, setLoginSheetOpen } = useAuth();
   const [places, setPlaces] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('all'); // all, chai, snacks, cafe
   const [openNow, setOpenNow] = useState(false);
   const [under30, setUnder30] = useState(false);
-  
+
   // Sorting state
   const [sortBy, setSortBy] = useState<string>('rating'); // rating, recent, most_reviewed
   const [showSortDropdown, setShowSortDropdown] = useState(false);
@@ -44,11 +44,11 @@ export default function FeedScreen() {
 
   // Client-side search and additional filtering (like Under ₹30)
   const filteredPlaces = places.filter(place => {
-    const matchesSearch = 
+    const matchesSearch =
       place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       place.area.toLowerCase().includes(searchQuery.toLowerCase());
-      
-    const matchesUnder30 = under30 
+
+    const matchesUnder30 = under30
       ? (place.category === 'chai' || place.category === 'snacks') // chai & snacks are typical under-30 spots
       : true;
 
@@ -56,26 +56,24 @@ export default function FeedScreen() {
   });
 
   const categoryFilters = [
-    { id: 'all', label: '🍟 All Food' },
-    { id: 'chai', label: '☕ Chai Tapri' },
-    { id: 'snacks', label: '🍢 Snacks' },
-    { id: 'cafe', label: '🍰 Café' },
+    { id: 'all', label: 'All' },
+    { id: 'chai', label: 'Chai' },
+    { id: 'snacks', label: 'Snacks' },
+    { id: 'cafe', label: 'Café' },
   ];
 
   return (
     <div className="flex flex-col min-h-screen">
-      
       {/* 1. Sticky Top Bar */}
-      <header className="sticky top-0 z-30 bg-card/90 backdrop-blur-md border-b border-border/80 px-4 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-md px-4 py-3 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-1.5 text-primary">
-          <Flame size={24} fill="currentColor" />
-          <span className="font-heading text-2xl font-extrabold tracking-wide">Chaska</span>
+        <Link href="/" className="flex items-center gap-1.5 text-foreground">
+          <span className="font-heading text-2xl font-extrabold tracking-wide text-foreground">Chaska</span>
         </Link>
 
         {/* Location Pill */}
-        <div className="flex items-center gap-1 bg-[#FFF2E0] border border-[#FEE2C3] px-3 py-1.5 rounded-tag text-xs font-bold text-primary select-none">
-          <MapPin size={12} fill="currentColor" />
+        <div className="flex items-center gap-1 bg-surface-container-low border border-border px-3.5 py-1.5 rounded-full text-xs font-bold text-primary select-none shadow-sm">
+          <MapPin size={12} className="text-primary" />
           <span>Rajnandgaon</span>
         </div>
 
@@ -83,7 +81,7 @@ export default function FeedScreen() {
         {user ? (
           <Link 
             href="/profile" 
-            className="w-9 h-9 rounded-full overflow-hidden border border-primary shadow-sm hover:scale-105 transition-transform"
+            className="w-9 h-9 rounded-full overflow-hidden border border-border shadow-sm hover:scale-105 transition-transform"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
@@ -109,13 +107,13 @@ export default function FeedScreen() {
         <div className="flex gap-2">
           {/* Search Input */}
           <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-text" size={16} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-container" size={16} />
             <input
               type="text"
-              placeholder="Search stalls, areas, chaat..."
+              placeholder="Search for chai, snacks, or cafes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-11 bg-card border border-border rounded-xl pl-10 pr-4 text-xs font-semibold focus:outline-none focus:border-primary shadow-sm placeholder-muted-text"
+              className="w-full h-11 bg-white border border-border rounded-card pl-11 pr-4 text-xs font-semibold focus:outline-none focus:border-primary-container focus:ring-0 focus:border-2 shadow-warm placeholder-muted-text/80 text-foreground transition-all"
             />
           </div>
 
@@ -123,7 +121,7 @@ export default function FeedScreen() {
           <div className="relative">
             <button
               onClick={() => setShowSortDropdown(!showSortDropdown)}
-              className={`w-11 h-11 border border-border rounded-xl flex items-center justify-center transition-colors shadow-sm bg-card hover:bg-orange-50 ${
+              className={`w-11 h-11 border border-border rounded-card flex items-center justify-center transition-colors shadow-warm bg-white hover:bg-surface-container/20 ${
                 sortBy !== 'rating' ? 'text-primary border-primary/50' : 'text-foreground'
               }`}
               title="Sort items"
@@ -133,30 +131,30 @@ export default function FeedScreen() {
 
             {/* Sort Dropdown Drawer */}
             {showSortDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-xl shadow-lg z-20 overflow-hidden text-xs py-1">
-                <p className="px-3 py-1.5 font-bold text-muted-text text-[10px] uppercase border-b border-border/60">
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-border rounded-card shadow-lg z-20 overflow-hidden text-xs py-1">
+                <p className="px-3 py-1.5 font-bold text-muted-text text-[10px] uppercase border-b border-border/40">
                   Sort Places By
                 </p>
                 <button
                   onClick={() => { setSortBy('rating'); setShowSortDropdown(false); }}
-                  className={`w-full px-3 py-2 text-left hover:bg-orange-50 font-semibold flex items-center justify-between ${
-                    sortBy === 'rating' ? 'text-primary bg-orange-50/40' : 'text-foreground'
+                  className={`w-full px-3 py-2 text-left hover:bg-surface-container/40 font-semibold flex items-center justify-between ${
+                    sortBy === 'rating' ? 'text-primary bg-surface-container/30' : 'text-foreground'
                   }`}
                 >
                   ⭐ Top Rated
                 </button>
                 <button
                   onClick={() => { setSortBy('recent'); setShowSortDropdown(false); }}
-                  className={`w-full px-3 py-2 text-left hover:bg-orange-50 font-semibold flex items-center justify-between ${
-                    sortBy === 'recent' ? 'text-primary bg-orange-50/40' : 'text-foreground'
+                  className={`w-full px-3 py-2 text-left hover:bg-surface-container/40 font-semibold flex items-center justify-between ${
+                    sortBy === 'recent' ? 'text-primary bg-surface-container/30' : 'text-foreground'
                   }`}
                 >
                   🕒 Newly Added
                 </button>
                 <button
                   onClick={() => { setSortBy('most_reviewed'); setShowSortDropdown(false); }}
-                  className={`w-full px-3 py-2 text-left hover:bg-orange-50 font-semibold flex items-center justify-between ${
-                    sortBy === 'most_reviewed' ? 'text-primary bg-orange-50/40' : 'text-foreground'
+                  className={`w-full px-3 py-2 text-left hover:bg-surface-container/40 font-semibold flex items-center justify-between ${
+                    sortBy === 'most_reviewed' ? 'text-primary bg-surface-container/30' : 'text-foreground'
                   }`}
                 >
                   💬 Most Reviewed
@@ -172,10 +170,10 @@ export default function FeedScreen() {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-1.5 rounded-tag text-xs font-bold whitespace-nowrap border transition-all ${
+              className={`px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap border transition-all ${
                 activeCategory === cat.id
-                  ? 'bg-primary text-white border-primary shadow-sm scale-102'
-                  : 'bg-card text-foreground border-border hover:bg-orange-50/50'
+                  ? 'bg-primary-container text-white border-primary-container shadow-sm'
+                  : 'bg-white text-muted-text border-border hover:bg-surface-container-low/50'
               }`}
             >
               {cat.label}
@@ -187,11 +185,10 @@ export default function FeedScreen() {
         <div className="flex gap-2 text-xs">
           <button
             onClick={() => setOpenNow(!openNow)}
-            className={`px-3 py-1 rounded-full border font-bold flex items-center gap-1 transition-all ${
-              openNow
-                ? 'bg-[#E8F5E9] text-status-open border-[#A5D6A7]'
-                : 'bg-card text-muted-text border-border'
-            }`}
+            className={`px-3 py-1 rounded-full border font-bold flex items-center gap-1 transition-all ${openNow
+              ? 'bg-[#E8F5E9] text-status-open border-[#A5D6A7]'
+              : 'bg-card text-muted-text border-border'
+              }`}
           >
             <span className={openNow ? 'text-status-open' : 'text-muted-text'}>●</span>
             Open Now
@@ -199,11 +196,10 @@ export default function FeedScreen() {
 
           <button
             onClick={() => setUnder30(!under30)}
-            className={`px-3 py-1 rounded-full border font-bold transition-all ${
-              under30
-                ? 'bg-[#E0F2F1] text-emerald-800 border-[#80CBC4]'
-                : 'bg-card text-muted-text border-border'
-            }`}
+            className={`px-3 py-1 rounded-full border font-bold transition-all ${under30
+              ? 'bg-[#E0F2F1] text-emerald-800 border-[#80CBC4]'
+              : 'bg-card text-muted-text border-border'
+              }`}
           >
             Under ₹30
           </button>

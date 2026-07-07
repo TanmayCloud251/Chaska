@@ -6,42 +6,48 @@ import * as path from 'path';
 const SEED_PLACES = [
   {
     id: "11111111-1111-1111-1111-111111111111",
-    name: "Sharma Ji ki Chai",
+    name: "Sharma Ji Ki Tapri",
     category: "chai",
-    area: "Gandhi Chowk",
+    area: "Cinema Square, Main Road",
     description: "Famous kulhad chai and freshly made bun-muska. The ultimate hangout spot for students and tea lovers.",
     lat: 21.0972,
     lng: 81.0354,
     maps_url: "https://www.google.com/maps/dir/?api=1&destination=21.0972,81.0354",
     is_verified: true,
     added_by: null,
-    created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+    created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+    price_range: "₹₹",
+    avg_price: 50
   },
   {
     id: "22222222-2222-2222-2222-222222222222",
-    name: "Baba Samosa Wala",
+    name: "Bikaner Sweets & Snacks",
     category: "snacks",
-    area: "Station Road",
+    area: "Bus Stand Market",
     description: "Crispy hot samosas served with their signature spicy green chutney and sweet tamarind chutney.",
     lat: 21.0956,
     lng: 81.0341,
     maps_url: "https://www.google.com/maps/dir/?api=1&destination=21.0956,81.0341",
     is_verified: true,
     added_by: null,
-    created_at: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString()
+    created_at: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(),
+    price_range: "₹",
+    avg_price: 40
   },
   {
     id: "33333333-3333-3333-3333-333333333333",
-    name: "The Café Hub",
+    name: "Café Chaska Corner",
     category: "cafe",
-    area: "Budhwari Bazaar",
+    area: "Model Town, East Gate",
     description: "Modern cafe with artisanal coffee, sandwiches, and a great workspace vibe.",
     lat: 21.0981,
     lng: 81.0368,
     maps_url: "https://www.google.com/maps/dir/?api=1&destination=21.0981,81.0368",
     is_verified: true,
     added_by: null,
-    created_at: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+    created_at: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+    price_range: "₹",
+    avg_price: 30
   },
   {
     id: "44444444-4444-4444-4444-444444444444",
@@ -54,7 +60,9 @@ const SEED_PLACES = [
     maps_url: "https://www.google.com/maps/dir/?api=1&destination=21.0963,81.0378",
     is_verified: true,
     added_by: null,
-    created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+    created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+    price_range: "₹₹",
+    avg_price: 60
   },
   {
     id: "55555555-5555-5555-5555-555555555555",
@@ -67,7 +75,9 @@ const SEED_PLACES = [
     maps_url: "https://www.google.com/maps/dir/?api=1&destination=21.0948,81.0325",
     is_verified: true,
     added_by: null,
-    created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+    created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+    price_range: "₹",
+    avg_price: 25
   },
   {
     id: "66666666-6666-6666-6666-666666666666",
@@ -80,9 +90,12 @@ const SEED_PLACES = [
     maps_url: "https://www.google.com/maps/dir/?api=1&destination=21.0989,81.0362",
     is_verified: true,
     added_by: null,
-    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    price_range: "₹",
+    avg_price: 15
   }
 ];
+
 
 const SEED_USERS = [
   {
@@ -185,7 +198,7 @@ const SEED_PHOTOS = [
     id: "p2",
     place_id: "22222222-2222-2222-2222-222222222222",
     uploaded_by: "99999999-9999-9999-9999-999999999999",
-    photo_url: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=800",
+    photo_url: "https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=800",
     is_cover: true,
     created_at: new Date().toISOString()
   },
@@ -193,7 +206,7 @@ const SEED_PHOTOS = [
     id: "p3",
     place_id: "33333333-3333-3333-3333-333333333333",
     uploaded_by: "99999999-9999-9999-9999-999999999999",
-    photo_url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800",
+    photo_url: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=800",
     is_cover: true,
     created_at: new Date().toISOString()
   },
@@ -217,38 +230,173 @@ const SEED_PHOTOS = [
     id: "p6",
     place_id: "66666666-6666-6666-6666-666666666666",
     uploaded_by: "99999999-9999-9999-9999-999999999999",
-    photo_url: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=800", // poha proxy
+    photo_url: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=800",
     is_cover: true,
     created_at: new Date().toISOString()
   }
 ];
 
 const SEED_REVIEWS = [
+  // Sharma Ji Ki Tapri (11111111-1111-1111-1111-111111111111): target rating 4.8. (5, 5, 5, 5, 4)
   {
     id: "r1",
     place_id: "11111111-1111-1111-1111-111111111111",
     user_id: "99999999-9999-9999-9999-999999999999",
-    item_name: "Adrak Elaichi Kulhad Chai",
+    item_name: "Masala Chai",
     overall_rating: 5,
     food_rating: 3,
     service_rating: 3,
     cleanliness_rating: 2,
     value_rating: 3,
-    review_text: "Perfect blend of strong tea and ginger aroma. Served hot in real clay kulhads. Absolutely worth it!",
+    review_text: "The Masala Chai here is the best in the city, never disappoints after a long day.",
     created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
   },
   {
+    id: "r1_2",
+    place_id: "11111111-1111-1111-1111-111111111111",
+    user_id: "88888888-8888-8888-8888-888888888888",
+    item_name: "Bun Maska",
+    overall_rating: 5,
+    food_rating: 3,
+    service_rating: 3,
+    cleanliness_rating: 2,
+    value_rating: 3,
+    review_text: "Soft bun and perfectly paired tea.",
+    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r1_3",
+    place_id: "11111111-1111-1111-1111-111111111111",
+    user_id: "99999999-9999-9999-9999-999999999999",
+    item_name: "Adrak Chai",
+    overall_rating: 5,
+    food_rating: 3,
+    service_rating: 3,
+    cleanliness_rating: 2,
+    value_rating: 3,
+    review_text: "Lovely spice mix.",
+    created_at: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r1_4",
+    place_id: "11111111-1111-1111-1111-111111111111",
+    user_id: "88888888-8888-8888-8888-888888888888",
+    item_name: "Samosa",
+    overall_rating: 5,
+    food_rating: 3,
+    service_rating: 3,
+    cleanliness_rating: 2,
+    value_rating: 3,
+    review_text: "Very crispy.",
+    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r1_5",
+    place_id: "11111111-1111-1111-1111-111111111111",
+    user_id: "99999999-9999-9999-9999-999999999999",
+    item_name: "Ginger Chai",
+    overall_rating: 4,
+    food_rating: 2,
+    service_rating: 2,
+    cleanliness_rating: 2,
+    value_rating: 2,
+    review_text: "Good tea.",
+    created_at: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString()
+  },
+
+  // Bikaner Sweets & Snacks (22222222-2222-2222-2222-222222222222): target rating 4.2. (5, 4, 4, 4, 4)
+  {
     id: "r2",
     place_id: "22222222-2222-2222-2222-222222222222",
-    user_id: "88888888-8888-8888-8888-888888888888",
-    item_name: "Aloo Samosa",
-    overall_rating: 4,
+    user_id: "99999999-9999-9999-9999-999999999999",
+    item_name: "Kachori",
+    overall_rating: 5,
     food_rating: 3,
+    service_rating: 3,
+    cleanliness_rating: 2,
+    value_rating: 3,
+    review_text: "Best Kachori and sweet chai combo in town. Always fresh.",
+    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r2_2",
+    place_id: "22222222-2222-2222-2222-222222222222",
+    user_id: "88888888-8888-8888-8888-888888888888",
+    item_name: "Samosa",
+    overall_rating: 4,
+    food_rating: 2,
     service_rating: 2,
     cleanliness_rating: 2,
     value_rating: 3,
-    review_text: "Huge samosas and extremely crispy! Love the spicy mint chutney they give.",
+    review_text: "Samosas are quite crispy and fresh.",
+    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r2_3",
+    place_id: "22222222-2222-2222-2222-222222222222",
+    user_id: "99999999-9999-9999-9999-999999999999",
+    item_name: "Jalebi",
+    overall_rating: 4,
+    food_rating: 2,
+    service_rating: 2,
+    cleanliness_rating: 2,
+    value_rating: 3,
+    review_text: "Jalebi is hot and sweet.",
+    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r2_4",
+    place_id: "22222222-2222-2222-2222-222222222222",
+    user_id: "88888888-8888-8888-8888-888888888888",
+    item_name: "Dhokla",
+    overall_rating: 4,
+    food_rating: 2,
+    service_rating: 2,
+    cleanliness_rating: 2,
+    value_rating: 3,
+    review_text: "Dhokla is soft.",
+    created_at: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r2_5",
+    place_id: "22222222-2222-2222-2222-222222222222",
+    user_id: "99999999-9999-9999-9999-999999999999",
+    item_name: "Chai",
+    overall_rating: 4,
+    food_rating: 2,
+    service_rating: 2,
+    cleanliness_rating: 2,
+    value_rating: 2,
+    review_text: "Good chai overall.",
+    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+  },
+
+  // Café Chaska Corner (33333333-3333-3333-3333-333333333333): target rating 4.5. (5, 4)
+  {
+    id: "r3",
+    place_id: "33333333-3333-3333-3333-333333333333",
+    user_id: "88888888-8888-8888-8888-888888888888",
+    item_name: "Elaichi Chai",
+    overall_rating: 5,
+    food_rating: 3,
+    service_rating: 3,
+    cleanliness_rating: 3,
+    value_rating: 3,
+    review_text: "Love the vibe and the Elaichi Chai. Great spot for catching up with friends.",
     created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r3_2",
+    place_id: "33333333-3333-3333-3333-333333333333",
+    user_id: "99999999-9999-9999-9999-999999999999",
+    item_name: "Cold Coffee",
+    overall_rating: 4,
+    food_rating: 2,
+    service_rating: 2,
+    cleanliness_rating: 2,
+    value_rating: 2,
+    review_text: "Nice place, cold coffee was good.",
+    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
   }
 ];
 
@@ -257,6 +405,20 @@ const SEED_VOTES = [
     id: "v1",
     review_id: "r1",
     user_id: "88888888-8888-8888-8888-888888888888",
+    vote: "agree",
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "v2",
+    review_id: "r2",
+    user_id: "88888888-8888-8888-8888-888888888888",
+    vote: "agree",
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "v3",
+    review_id: "r3",
+    user_id: "99999999-9999-9999-9999-999999999999",
     vote: "agree",
     created_at: new Date().toISOString()
   }
@@ -393,16 +555,84 @@ function simulateQuery(text: string, params: any[] = []): { rows: any[]; rowCoun
     return { rows: [], rowCount: 0 };
   }
 
+  // SELECT for map cover photo and rating
+  if (normalizedSql.includes("select (select photo_url from place_photos")) {
+    const placeId = params[0];
+    const place = store.places.find(p => p.id === placeId);
+    const reviews = store.reviews.filter(r => r.place_id === placeId);
+    const avg_rating = reviews.length > 0
+      ? (reviews.reduce((acc, r) => acc + r.overall_rating, 0) / reviews.length).toFixed(1)
+      : "0.0";
+    const review_count = reviews.length;
+    const coverPhotoObj = store.place_photos.find(photo => photo.place_id === placeId && photo.is_cover);
+    const cover_photo = coverPhotoObj ? coverPhotoObj.photo_url : null;
+    return {
+      rows: [{
+        cover_photo,
+        avg_rating,
+        review_count,
+        area: place ? place.area : ""
+      }],
+      rowCount: 1
+    };
+  }
+
+  // SELECT places from saved_places
+  if (normalizedSql.includes("from saved_places")) {
+    const userId = params[0];
+    const saved = store.saved_places.filter(s => s.user_id === userId);
+    const decoratePlace = (p: any) => {
+      if (!p) return p;
+      const reviews = store.reviews.filter(r => r.place_id === p.id);
+      const avg_rating = reviews.length > 0
+        ? (reviews.reduce((acc, r) => acc + r.overall_rating, 0) / reviews.length).toFixed(1)
+        : "0.0";
+      const review_count = reviews.length;
+      const coverPhotoObj = store.place_photos.find(photo => photo.place_id === p.id && photo.is_cover);
+      const cover_photo = coverPhotoObj ? coverPhotoObj.photo_url : null;
+      return {
+        ...p,
+        avg_rating,
+        review_count,
+        cover_photo
+      };
+    };
+    const rows = saved.map(s => {
+      const p = store.places.find(place => place.id === s.place_id);
+      return decoratePlace(p);
+    }).filter(x => x !== undefined && x !== null);
+    return { rows, rowCount: rows.length };
+  }
+
   // SELECT * FROM places (all places)
   if (normalizedSql.startsWith("select * from places") || normalizedSql.startsWith("select p.*")) {
+    const decoratePlace = (p: any) => {
+      if (!p) return p;
+      const reviews = store.reviews.filter(r => r.place_id === p.id);
+      const avg_rating = reviews.length > 0
+        ? (reviews.reduce((acc, r) => acc + r.overall_rating, 0) / reviews.length).toFixed(1)
+        : "0.0";
+      const review_count = reviews.length;
+      const coverPhotoObj = store.place_photos.find(photo => photo.place_id === p.id && photo.is_cover);
+      const cover_photo = coverPhotoObj ? coverPhotoObj.photo_url : null;
+      return {
+        ...p,
+        avg_rating,
+        review_count,
+        cover_photo
+      };
+    };
+
     // If getting single place, e.g. "where id = $1"
     if (normalizedSql.includes("where id = $1") || normalizedSql.includes("where id =")) {
       const idVal = params[0];
       const place = store.places.find(p => p.id === idVal);
-      return { rows: place ? [place] : [], rowCount: place ? 1 : 0 };
+      const rows = place ? [decoratePlace(place)] : [];
+      return { rows, rowCount: rows.length };
     }
     // Return all places with filter checks inside route handler, or return general list
-    return { rows: store.places, rowCount: store.places.length };
+    const decoratedPlaces = store.places.map(p => decoratePlace(p));
+    return { rows: decoratedPlaces, rowCount: decoratedPlaces.length };
   }
 
   // SELECT * FROM place_hours

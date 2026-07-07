@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --background: #FFFBF5;
-  --foreground: #2C1810;
+  --background: #fff8f6;
+  --foreground: #2a170f;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-nunito), system-ui, sans-serif;
+  font-family: var(--font-nunito-sans), system-ui, sans-serif;
   min-height: 100vh;
 }
 

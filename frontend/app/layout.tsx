@@ -1,20 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Baloo_2, Nunito } from "next/font/google";
+import { Be_Vietnam_Pro, Nunito_Sans } from "next/font/google";
 import { AuthProvider } from "../lib/auth";
 import LoginSheet from "../components/LoginSheet";
 import BottomNav from "../components/BottomNav";
 import "./globals.css";
 
-const baloo = Baloo_2({
+const beVietnam = Be_Vietnam_Pro({
   subsets: ["latin"],
-  weight: "800",
-  variable: "--font-baloo",
+  weight: ["400", "700", "800"],
+  variable: "--font-be-vietnam",
 });
 
-const nunito = Nunito({
+const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
-  variable: "--font-nunito",
+  variable: "--font-nunito-sans",
 });
 
 export const metadata: Metadata = {
@@ -35,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${baloo.variable} ${nunito.variable}`}>
+    <html lang="en" className={`${beVietnam.variable} ${nunitoSans.variable}`}>
       <body className="font-body bg-background text-foreground min-h-screen antialiased">
         <AuthProvider>
           <main className="max-w-md mx-auto min-h-screen relative flex flex-col bg-background shadow-warm border-x border-border pb-20">
