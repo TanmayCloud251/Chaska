@@ -77,13 +77,13 @@ export default function FeedCard({ place }: FeedCardProps) {
 
         {/* Overlaid Open/Closed Status Badge */}
         <span
-          className={`absolute top-3 right-3 text-[11px] font-bold px-3 py-1 rounded-full shadow-sm select-none ${
+          className={`absolute top-3 right-3 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-sm select-none backdrop-blur-md ${
             place.is_open
-              ? 'bg-status-open/90 text-white'
-              : 'bg-status-closed/90 text-white'
+              ? 'bg-status-open/10 border border-status-open/30 text-status-open'
+              : 'bg-status-closed/10 border border-status-closed/30 text-status-closed'
           }`}
         >
-          {place.is_open ? 'Open' : 'Closed'}
+          {place.is_open ? 'Open Now' : 'Closed'}
         </span>
       </div>
 
