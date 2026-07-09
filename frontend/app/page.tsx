@@ -70,8 +70,8 @@ export default function FeedScreen() {
       {/* 1. Sticky Top Bar */}
       <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-md px-4 py-3 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-1.5 text-foreground">
-          <span className="font-heading text-xl font-extrabold tracking-wide text-foreground">Chaska</span>
+        <Link href="/" className="flex items-center gap-1.5 text-primary">
+          <span className="font-heading text-xl font-extrabold tracking-wide text-primary">Chaska</span>
         </Link>
 
         {/* Location Pill */}
