@@ -844,16 +844,16 @@ export default function PlaceDetailScreen() {
       </div>
 
       {/* 8. Sticky CTA Direction Footer */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border/40 p-4 shadow-[0_-4px_16px_rgba(44,24,16,0.04)]">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-t border-border/40 p-4 shadow-[0_-8px_24px_rgba(44,24,16,0.06)]">
         <div className="max-w-md mx-auto">
           <a
             href={navUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full h-12 bg-primary-container hover:bg-primary text-white rounded-btn shadow-md text-sm font-bold flex items-center justify-center gap-1.5 transition-all"
+            className="group w-full h-12 bg-primary-container hover:bg-primary active:scale-[0.98] hover:scale-[1.02] text-white rounded-btn shadow-md hover:shadow-lg text-sm font-bold flex items-center justify-center gap-1.5 transition-all duration-200"
           >
             Take me there
-            <span className="text-lg leading-none mt-[-1px]">→</span>
+            <span className="text-lg leading-none mt-[-1px] transition-transform duration-200 group-hover:translate-x-1">→</span>
           </a>
         </div>
       </div>

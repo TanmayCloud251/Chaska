@@ -7,6 +7,11 @@ import { Compass, Map, User } from 'lucide-react';
 export default function BottomNav() {
   const pathname = usePathname();
 
+  // Hide bottom navigation on shop/place detail pages to prevent overlap with sticky CTA
+  if (pathname?.startsWith('/place/')) {
+    return null;
+  }
+
   const navItems = [
     { label: 'Feed', href: '/', icon: Compass },
     { label: 'Map', href: '/map', icon: Map },
