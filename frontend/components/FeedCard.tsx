@@ -12,7 +12,7 @@ interface ReviewSnippet {
 interface Place {
   id: string;
   name: string;
-  category: 'chai' | 'coffee' | 'snacks' | 'cafe';
+  category: 'chai' | 'coffee' | 'snacks' | 'cafe' | 'smoking_allowed';
   area: string;
   description: string;
   lat: number;
@@ -97,11 +97,6 @@ export default function FeedCard({ place }: FeedCardProps) {
             </h3>
             <div className="flex items-center gap-1 mt-1 text-muted-text text-xs font-semibold">
               <span>{place.area}</span>
-              {place.is_verified && (
-                <span className="bg-sky-50 text-sky-600 border border-sky-200 text-[9px] px-1 rounded-sm ml-1 select-none font-bold">
-                  Verified
-                </span>
-              )}
             </div>
           </div>
           {/* Rating Pill Badge */}

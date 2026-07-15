@@ -1,4 +1,4 @@
-ds{
+{
   "compilerOptions": {
     "target": "es2022",
     "module": "commonjs",

@@ -63,6 +63,7 @@ export default function FeedScreen() {
     { id: 'chai', label: 'Chai' },
     { id: 'snacks', label: 'Snacks' },
     { id: 'cafe', label: 'Café' },
+    { id: 'smoking_allowed', label: 'Smoking Allowed' },
   ];
 
   return (
@@ -111,7 +112,7 @@ export default function FeedScreen() {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-container" size={16} />
           <input
             type="text"
-            placeholder="Search for chai, snacks, or cafes..."
+            placeholder="Search for chai, snacks, cafes, or smoking spots..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-11 bg-white border border-border rounded-card pl-11 pr-4 text-xs font-semibold focus:outline-none focus:border-primary-container focus:ring-0 focus:border-2 shadow-warm placeholder-muted-text/80 text-foreground transition-all"
@@ -304,6 +305,7 @@ export default function FeedScreen() {
                   { id: 'chai', label: 'Chai / Cafe' },
                   { id: 'snacks', label: 'Snacks Stalls' },
                   { id: 'cafe', label: 'Cafés & Dining' },
+                  { id: 'smoking_allowed', label: 'Smoking Allowed' },
                 ].map((cat) => {
                   const isActive = activeCategory === cat.id;
                   return (

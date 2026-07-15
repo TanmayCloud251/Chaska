@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS places (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
-  category VARCHAR(20) CHECK (category IN ('chai','coffee','snacks','cafe')),
+  category VARCHAR(20) CHECK (category IN ('chai','coffee','snacks','cafe','smoking_allowed')),
   area TEXT NOT NULL,
   description TEXT,
   lat DECIMAL(10,8),

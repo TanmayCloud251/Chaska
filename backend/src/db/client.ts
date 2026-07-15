@@ -93,6 +93,21 @@ const SEED_PLACES = [
     created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     price_range: "₹",
     avg_price: 15
+  },
+  {
+    id: "77777777-7777-7777-7777-777777777777",
+    name: "Sutta Corner & Chai",
+    category: "smoking_allowed",
+    area: "Station Road, Opp. Gate 2",
+    description: "A popular hangout for tea and smoking. Open late, great crowd, and quick service.",
+    lat: 21.0995,
+    lng: 81.0335,
+    maps_url: "https://www.google.com/maps/dir/?api=1&destination=21.0995,81.0335",
+    is_verified: true,
+    added_by: null,
+    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    price_range: "₹",
+    avg_price: 30
   }
 ];
 
@@ -182,6 +197,14 @@ const SEED_HOURS = [
     shift_label: "Breakfast Hours",
     opens_at: "06:00",
     closes_at: "12:00"
+  },
+  {
+    id: "h8",
+    place_id: "77777777-7777-7777-7777-777777777777",
+    day_type: "all_days",
+    shift_label: "All Day",
+    opens_at: "07:00",
+    closes_at: "23:00"
   }
 ];
 
@@ -231,6 +254,14 @@ const SEED_PHOTOS = [
     place_id: "66666666-6666-6666-6666-666666666666",
     uploaded_by: "99999999-9999-9999-9999-999999999999",
     photo_url: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=800",
+    is_cover: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "p7",
+    place_id: "77777777-7777-7777-7777-777777777777",
+    uploaded_by: "99999999-9999-9999-9999-999999999999",
+    photo_url: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800",
     is_cover: true,
     created_at: new Date().toISOString()
   }
@@ -397,6 +428,19 @@ const SEED_REVIEWS = [
     value_rating: 2,
     review_text: "Nice place, cold coffee was good.",
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: "r4",
+    place_id: "77777777-7777-7777-7777-777777777777",
+    user_id: "99999999-9999-9999-9999-999999999999",
+    item_name: "Cutting Chai",
+    overall_rating: 5,
+    food_rating: 3,
+    service_rating: 3,
+    cleanliness_rating: 2,
+    value_rating: 3,
+    review_text: "Perfect cutting chai and smoking friendly atmosphere.",
+    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
   }
 ];
 

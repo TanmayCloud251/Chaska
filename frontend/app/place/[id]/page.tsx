@@ -330,6 +330,8 @@ export default function PlaceDetailScreen() {
     tags.push('Best Samosas', 'Quick Bite');
   } else if (place.category === 'cafe') {
     tags.push('Café & Coffee', 'Good Hangout', 'Work Vibe');
+  } else if (place.category === 'smoking_allowed') {
+    tags.push('Smoking Zone', 'Hangout Spot');
   }
   if (parseFloat(place.avg_rating) >= 4.5) {
     tags.push('Student Favorite', 'Highly Rated');
@@ -454,11 +456,6 @@ export default function PlaceDetailScreen() {
             <div className="flex items-center gap-1 text-[11px] font-semibold text-white/95 mt-0.5">
               <MapPin size={11} className="text-primary-container" />
               <span>{place.area}</span>
-              {place.is_verified && (
-                <span className="bg-sky-500 text-white text-[8px] px-1 rounded-sm ml-1 select-none font-bold">
-                  Verified
-                </span>
-              )}
             </div>
           </div>
           {photos.length > 1 && (
@@ -485,7 +482,7 @@ export default function PlaceDetailScreen() {
               ● {place.is_open ? 'Open Now' : 'Closed'}
             </span>
             <span className="text-xs text-muted-text font-bold">
-              {place.price_range || '₹'} • {place.category === 'chai' ? 'Chai' : place.category === 'snacks' ? 'Street Food' : 'Café'}
+              {place.price_range || '₹'} • {place.category === 'chai' ? 'Chai' : place.category === 'snacks' ? 'Street Food' : place.category === 'smoking_allowed' ? 'Smoking Allowed' : 'Café'}
             </span>
           </div>
 
