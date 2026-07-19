@@ -18,6 +18,7 @@ const MapComponent = dynamic(
         <Loader2 className="animate-spin text-primary" size={32} />
         <span className="text-xs font-bold text-muted-text">Drawing map canvas...</span>
       </div>
+
     )
   }
 );
@@ -40,7 +41,7 @@ export default function MapScreen() {
   const { user, setLoginSheetOpen } = useAuth();
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Filtering & Selection state
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
@@ -120,7 +121,7 @@ export default function MapScreen() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-80px)] overflow-hidden bg-background">
-      
+
       {/* 1. Header component (matching standard look) */}
       <header className="z-30 bg-background/95 border-b border-border/30 px-4 py-3 flex items-center justify-between shadow-sm">
         <Link href="/" className="flex items-center gap-1.5 text-primary">
@@ -133,14 +134,14 @@ export default function MapScreen() {
         </div>
 
         {user ? (
-          <Link 
-            href="/profile" 
+          <Link
+            href="/profile"
             className="w-9 h-9 rounded-full overflow-hidden border border-border shadow-sm hover:scale-105 transition-transform"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={user.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'} 
-              alt={user.name || 'User'} 
+            <img
+              src={user.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'}
+              alt={user.name || 'User'}
               className="w-full h-full object-cover"
             />
           </Link>
@@ -156,7 +157,7 @@ export default function MapScreen() {
 
       {/* 2. Map Container & Overlay Area */}
       <div className="flex-1 relative w-full h-full">
-        
+
         {/* Floating Categories Bar overlayed on top of map */}
         <div className="absolute top-4 inset-x-0 z-20 px-4 pointer-events-none">
           <div className="flex gap-2 overflow-x-auto no-scrollbar pointer-events-auto bg-background/85 backdrop-blur-md p-2 rounded-2xl border border-border/40 shadow-warm">
@@ -170,11 +171,10 @@ export default function MapScreen() {
                     setSelectedPlace(null);
                   }
                 }}
-                className={`px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap border transition-all ${
-                  activeCategory === cat.id
+                className={`px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap border transition-all ${activeCategory === cat.id
                     ? 'bg-primary-container text-white border-primary-container shadow-sm scale-102'
                     : 'bg-white text-muted-text border-border hover:bg-surface-container-low/50'
-                }`}
+                  }`}
               >
                 {cat.label}
               </button>
