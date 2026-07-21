@@ -649,7 +649,7 @@ function simulateQuery(text: string, params: any[] = []): { rows: any[]; rowCoun
   }
 
   // SELECT * FROM places (all places)
-  if (normalizedSql.startsWith("select * from places") || normalizedSql.startsWith("select p.*")) {
+  if (normalizedSql.startsWith("select * from places") || normalizedSql.startsWith("select p.*") || normalizedSql.startsWith("select id, name, category, lat, lng, is_verified from places")) {
     const decoratePlace = (p: any) => {
       if (!p) return p;
       const reviews = store.reviews.filter(r => r.place_id === p.id);
