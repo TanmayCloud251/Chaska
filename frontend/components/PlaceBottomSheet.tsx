@@ -42,7 +42,7 @@ export default function PlaceBottomSheet({
         sheetOpen &&
         sheetRef.current &&
         !sheetRef.current.contains(e.target as Node) &&
-        !(e.target as Element).closest('.leaflet-marker-icon')
+        !(e.target as Element).closest('.map-marker')
       ) {
         onClose();
       }

@@ -1,17 +1,7 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, ZoomControl, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
-// Fix default icon assets issue in Next.js bundle compilation
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+import { APIProvider, Map, AdvancedMarker, useMap } from '@vis.gl/react-google-maps';
 
 interface MapPlace {
   id: string;
@@ -33,143 +23,285 @@ interface MapViewProps {
   onSelectPlace: (place: MapPlace) => void;
 }
 
-// Custom Pin Icon Builder matching the teardrop design specs
-const createPin = (category: string) => {
-  const colors: Record<string, string> = {
-    chai:   '#E8862A',
-    coffee: '#6B3F1A',
-    snacks: '#F4A227',
-    cafe:   '#2C1810',
-  };
-  
-  const icons: Record<string, string> = {
-    chai:   '🍵',
-    coffee: '☕',
-    snacks: '🍽️',
-    cafe:   '🏠',
-  };
+const RAJNANDGAON_CENTER = { lat: 21.0972, lng: 81.0354 };
+const DEFAULT_ZOOM = 14;
 
-  const pinColor = colors[category] || '#F47C2B';
-  const pinIcon = icons[category] || '📍';
+// Vintage warm sepia theme style JSON for Google Maps
+const VINTAGE_MAP_STYLE = [
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#fbf7f0"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#7e695d"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#fbf7f0"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#e5d9c7"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#ae9e90"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f5edd8"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f3e7cf"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#8b766a"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#ebd8be"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#847063"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#ffffff"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#fdfbfa"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f8ebd5"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#eacda3"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#948375"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#ebd8be"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f3e7cf"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#d6c0ab"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#8b7461"
+      }
+    ]
+  }
+];
 
-  return L.divIcon({
-    className: '',
-    html: `
-      <div style="
-        background: ${pinColor};
-        width: 36px; height: 36px;
-        border-radius: 50% 50% 50% 0;
-        transform: rotate(-45deg);
-        border: 2px solid white;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-        display: flex; align-items: center; justify-content: center;
-      ">
-        <span style="transform: rotate(45deg); font-size: 16px;">
-          ${pinIcon}
-        </span>
-      </div>
-    `,
-    iconSize: [36, 36],
-    iconAnchor: [18, 36],
-  });
-};
-
-// Map Recenter Component to pan smooth when a place details is opened
-function RecenterMap({ center }: { center: [number, number] }) {
+function RecenterMap({ center }: { center: { lat: number; lng: number } }) {
   const map = useMap();
   useEffect(() => {
-    if (center) {
-      map.setView(center, 15, {
-        animate: true,
-        duration: 0.5
-      });
+    if (map && center) {
+      map.panTo(center);
+      if (map.getZoom() !== 15) {
+        map.setZoom(15);
+      }
     }
   }, [center, map]);
   return null;
 }
 
 export default function MapView({ places, selectedPlace, onSelectPlace }: MapViewProps) {
-  const RAJNANDGAON_CENTER: [number, number] = [21.0972, 81.0354];
-  const DEFAULT_ZOOM = 14;
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-  const mapCenter: [number, number] = selectedPlace
-    ? [selectedPlace.lat, selectedPlace.lng]
+  if (!apiKey) {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center bg-[#FFFBF5] border-2 border-dashed border-[#E8E0D5]/50 p-6 text-center gap-3 min-h-[450px]">
+        <div className="text-4xl">📍</div>
+        <h3 className="font-heading text-lg font-bold text-[#2C1810]" style={{ fontFamily: 'Baloo 2, sans-serif' }}>
+          Google Maps Key Required
+        </h3>
+        <p className="text-xs text-[#6B6B6B] max-w-xs">
+          Please set the <code className="bg-[#E8E0D5]/50 px-1.5 py-0.5 rounded font-mono text-[#F47C2B]">NEXT_PUBLIC_GOOGLE_MAPS_API_KEY</code> environment variable in your <code className="bg-[#E8E0D5]/50 px-1.5 py-0.5 rounded font-mono">.env.local</code> file to run the map interface.
+        </p>
+      </div>
+    );
+  }
+
+  const mapCenter = selectedPlace
+    ? { lat: selectedPlace.lat, lng: selectedPlace.lng }
     : RAJNANDGAON_CENTER;
+
+  // Custom Pin Element Builder
+  const renderPin = (category: string) => {
+    const colors: Record<string, string> = {
+      chai:   '#E8862A',
+      coffee: '#6B3F1A',
+      snacks: '#F4A227',
+      cafe:   '#2C1810',
+    };
+    
+    const icons: Record<string, string> = {
+      chai:   '🍵',
+      coffee: '☕',
+      snacks: '🍽️',
+      cafe:   '🏠',
+    };
+
+    const pinColor = colors[category] || '#F47C2B';
+    const pinIcon = icons[category] || '📍';
+
+    return (
+      <div 
+        className="map-marker transition-all duration-200 hover:scale-110 hover:-translate-y-1 cursor-pointer"
+        style={{
+          background: pinColor,
+          width: '36px',
+          height: '36px',
+          borderRadius: '50% 50% 50% 0',
+          transform: 'rotate(-45deg)',
+          border: '2px solid white',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <span style={{ transform: 'rotate(45deg)', fontSize: '16px' }}>
+          {pinIcon}
+        </span>
+      </div>
+    );
+  };
 
   return (
     <div className="w-full h-full relative overflow-hidden bg-[#FFFBF5]">
-      {/* Custom styled Leaflet zoom controls in Terracotta theme */}
-      <style dangerouslySetInnerHTML={{__html: `
-        .vintage-map .leaflet-tile-container {
-          filter: sepia(0.8) contrast(1.1) brightness(1.02) saturate(0.85);
-        }
-        .vintage-map {
-          background-color: #FFFBF5 !important;
-        }
-        .vintage-map .leaflet-bar {
-          border: 1px solid #E8E0D5 !important;
-          box-shadow: 0 2px 12px rgba(44, 24, 16, 0.08) !important;
-          border-radius: 12px !important;
-          overflow: hidden;
-        }
-        .vintage-map .leaflet-bar a {
-          background-color: #FFFFFF !important;
-          color: #2C1810 !important;
-          border-bottom: 1px solid #E8E0D5 !important;
-          width: 36px !important;
-          height: 36px !important;
-          line-height: 36px !important;
-          font-size: 18px !important;
-          transition: background-color 0.2s;
-        }
-        .vintage-map .leaflet-bar a:hover {
-          background-color: #FFFBF5 !important;
-          color: #F47C2B !important;
-        }
-        .vintage-map .leaflet-bar a:last-child {
-          border-bottom: none !important;
-        }
-        .leaflet-div-icon {
-          background: transparent !important;
-          border: none !important;
-        }
-      `}} />
+      <APIProvider apiKey={apiKey}>
+        <Map
+          defaultCenter={RAJNANDGAON_CENTER}
+          defaultZoom={DEFAULT_ZOOM}
+          mapId="DEMO_MAP_ID"
+          styles={VINTAGE_MAP_STYLE}
+          disableDefaultUI={true}
+          zoomControl={true}
+          gestureHandling="greedy"
+          className="w-full h-full"
+        >
+          {selectedPlace && (
+            <RecenterMap center={mapCenter} />
+          )}
 
-      <MapContainer
-        center={RAJNANDGAON_CENTER}
-        zoom={DEFAULT_ZOOM}
-        className="w-full h-full vintage-map z-10"
-        zoomControl={false}
-        attributionControl={true}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-
-        <ZoomControl position="bottomright" />
-
-        {/* Recenter helper when selectedPlace shifts */}
-        {selectedPlace && (
-          <RecenterMap center={mapCenter} />
-        )}
-
-        {/* Place Markers */}
-        {places.map((place) => {
-          return (
-            <Marker
+          {places.map((place) => (
+            <AdvancedMarker
               key={place.id}
-              position={[place.lat, place.lng]}
-              icon={createPin(place.category)}
-              eventHandlers={{
-                click: () => {
-                  onSelectPlace(place);
-                },
-              }}
-            />
-          );
-        })}
-      </MapContainer>
+              position={{ lat: place.lat, lng: place.lng }}
+              onClick={() => onSelectPlace(place)}
+            >
+              {renderPin(place.category)}
+            </AdvancedMarker>
+          ))}
+        </Map>
+      </APIProvider>
     </div>
   );
 }
