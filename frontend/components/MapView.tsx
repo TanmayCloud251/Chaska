@@ -140,7 +140,7 @@ export default function MapView({ places, selectedPlace, onSelectPlace }: MapVie
         zoom={DEFAULT_ZOOM}
         className="w-full h-full vintage-map z-10"
         zoomControl={false}
-        attributionControl={true}
+        attributionControl={false}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
