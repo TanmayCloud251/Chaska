@@ -20,7 +20,10 @@ import {
   Plus, 
   X, 
   Check, 
-  Loader2 
+  Loader2,
+  Camera,
+  Image,
+  Send
 } from 'lucide-react';
 
 export default function PlaceDetailScreen() {
@@ -46,8 +49,28 @@ export default function PlaceDetailScreen() {
   const [cleanlinessRating, setCleanlinessRating] = useState(3);
   const [valueRating, setValueRating] = useState(3);
   const [reviewText, setReviewText] = useState('');
+  const [reviewPhotos, setReviewPhotos] = useState<string[]>([]);
   const [submittingReview, setSubmittingReview] = useState(false);
   const [reviewError, setReviewError] = useState('');
+
+  // Preset Unsplash street food photos for mock photo-adding cycle
+  const MOCK_FOOD_PHOTOS = [
+    'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=600&auto=format&fit=crop&q=80', // Samosa
+    'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&auto=format&fit=crop&q=80', // Chai
+    'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop&q=80', // Idli/Vada
+    'https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=600&auto=format&fit=crop&q=80', // Kachori
+    'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop&q=80', // Paneer tikka
+    'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&auto=format&fit=crop&q=80', // Coffee
+  ];
+
+  const handleAddMockPhoto = () => {
+    const nextPhoto = MOCK_FOOD_PHOTOS[reviewPhotos.length % MOCK_FOOD_PHOTOS.length];
+    setReviewPhotos(prev => [...prev, nextPhoto]);
+  };
+
+  const handleRemovePhoto = (index: number) => {
+    setReviewPhotos(prev => prev.filter((_, idx) => idx !== index));
+  };
 
   // Claim Form State
   const [showClaimModal, setShowClaimModal] = useState(false);
@@ -224,7 +247,8 @@ export default function PlaceDetailScreen() {
         service_rating: serviceRating,
         cleanliness_rating: cleanlinessRating,
         value_rating: valueRating,
-        review_text: reviewText
+        review_text: reviewText,
+        photo_urls: reviewPhotos
       });
 
       // Reload reviews and place stats
@@ -238,6 +262,7 @@ export default function PlaceDetailScreen() {
       setCleanlinessRating(3);
       setValueRating(3);
       setReviewText('');
+      setReviewPhotos([]);
       setShowReviewModal(false);
       showToast("Review submitted successfully!");
     } catch (err: any) {
@@ -857,95 +882,111 @@ export default function PlaceDetailScreen() {
 
       {/* 9. WRITE REVIEW MODAL SHEET */}
       {showReviewModal && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 backdrop-blur-sm transition-opacity duration-300">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 backdrop-blur-[2px] transition-opacity duration-300">
           <div className="absolute inset-0" onClick={() => setShowReviewModal(false)}></div>
           
           <form 
             onSubmit={handleSubmitReview}
-            className="relative z-10 w-full max-w-md bg-white border-t border-border rounded-t-[24px] shadow-2xl p-6 max-h-[90vh] overflow-y-auto flex flex-col gap-4 text-foreground animate-in slide-in-from-bottom duration-250"
+            className="relative z-10 w-full max-w-md bg-[#FFFBF5] border-t border-[#E8E0D5] rounded-t-[24px] shadow-2xl p-5 pb-8 max-h-[92vh] overflow-y-auto flex flex-col gap-4 text-[#2C1810] animate-in slide-in-from-bottom duration-250 font-body"
+            style={{ fontFamily: 'Nunito, sans-serif' }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-border/50 pb-3">
-              <h3 className="font-heading text-base font-bold text-foreground">Write a Review</h3>
+            <div className="flex items-center justify-between border-b border-[#E8E0D5]/30 pb-3">
+              {/* Left Close Button */}
               <button 
                 type="button"
                 onClick={() => setShowReviewModal(false)}
-                className="p-1 rounded-full hover:bg-surface-container-low text-muted-text transition-colors"
+                className="p-1.5 rounded-full hover:bg-[#FFFBF5] text-[#2C1810]/75 transition-colors"
               >
-                <X size={18} />
+                <X size={20} className="stroke-[2.5]" />
               </button>
+              
+              {/* Centered Brand Title */}
+              <span 
+                className="text-[#F47C2B] font-extrabold tracking-wide text-xl"
+                style={{ fontFamily: 'Baloo 2, sans-serif' }}
+              >
+                Chaska
+              </span>
+
+              {/* Right User Avatar */}
+              <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#F47C2B] shadow-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={user?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'}
+                  alt={user?.name || 'User'}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
 
             {reviewError && (
-              <div className="bg-status-closed/5 border border-status-closed/20 text-status-closed text-xs rounded-card p-3 font-semibold">
+              <div className="bg-[#C62828]/5 border border-[#C62828]/25 text-[#C62828] text-xs rounded-card p-3 font-semibold">
                 {reviewError}
               </div>
             )}
 
-            {/* Inputs */}
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-extrabold uppercase tracking-wider text-muted-text">
-                Item Name
-              </label>
+            {/* Inputs - What did you eat? */}
+            <div className="flex flex-col gap-1 w-full border-b border-[#E8E0D5] pb-2 mt-2">
               <input
                 type="text"
                 required
-                placeholder="e.g. Samosa, Masala Chai, Bun Maska"
+                placeholder="What did you eat?"
                 value={itemName}
                 onChange={(e) => setItemName(e.target.value)}
-                className="h-10 border border-border rounded-card px-3 text-xs font-semibold focus:outline-none focus:border-primary-container"
+                className="w-full bg-transparent text-xl font-medium placeholder-[#C6B6A5] text-[#2C1810] focus:outline-none border-none font-heading"
+                style={{ fontFamily: 'Baloo 2, sans-serif' }}
               />
             </div>
 
             {/* Overall Rating Selection */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-extrabold uppercase tracking-wider text-muted-text">
-                Overall Experience Rating
-              </label>
-              <div className="flex items-center gap-1.5">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => setOverallRating(star)}
-                    className="p-1 focus:outline-none"
-                  >
-                    <Star 
-                      size={24} 
-                      className={`transition-colors ${
-                        star <= overallRating 
-                          ? 'fill-[#B45309] text-[#B45309]' 
-                          : 'text-border fill-none'
-                      }`}
-                    />
-                  </button>
-                ))}
-              </div>
+            <div className="flex items-center justify-center gap-2.5 py-2 w-full">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setOverallRating(star)}
+                  className="p-1 focus:outline-none hover:scale-105 active:scale-95 transition-transform"
+                >
+                  <Star 
+                    size={36} 
+                    className={`transition-colors stroke-[1.5] ${
+                      star <= overallRating 
+                        ? 'fill-[#F47C2B] text-[#F47C2B]' 
+                        : 'text-[#C6B6A5] fill-none'
+                    }`}
+                  />
+                </button>
+              ))}
             </div>
 
-            {/* Sub-Ratings Parameters (1-3 scale) */}
-            <div className="grid grid-cols-2 gap-4 border-y border-border/30 py-3 mt-1">
+            {/* Sub-Ratings Parameters */}
+            <div className="bg-[#FAF2E8] border border-[#E8E0D5]/35 rounded-[20px] p-4 flex flex-col gap-1 shadow-sm">
               {[
-                { label: '🍔 Food Taste', value: foodRating, setter: setFoodRating },
-                { label: '⚡ Service Speed', value: serviceRating, setter: setServiceRating },
-                { label: '✨ Cleanliness', value: cleanlinessRating, setter: setCleanlinessRating },
-                { label: '💰 Value for Money', value: valueRating, setter: setValueRating },
+                { label: 'Food', value: foodRating, setter: setFoodRating },
+                { label: 'Service', value: serviceRating, setter: setServiceRating },
+                { label: 'Cleanliness', value: cleanlinessRating, setter: setCleanlinessRating },
+                { label: 'Value', value: valueRating, setter: setValueRating },
               ].map((item, idx) => (
-                <div key={idx} className="flex flex-col gap-1.5">
-                  <span className="text-[10px] font-bold text-muted-text">{item.label}</span>
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3].map((val) => (
+                <div key={idx} className="flex justify-between items-center py-2 border-b border-[#E8E0D5]/20 last:border-b-0">
+                  <span className="text-sm font-semibold text-[#2C1810]">{item.label}</span>
+                  <div className="flex items-center gap-3">
+                    {[
+                      { val: 1, emoji: '😐' },
+                      { val: 2, emoji: '😊' },
+                      { val: 3, emoji: '😍' },
+                    ].map((opt) => (
                       <button
-                        key={val}
+                        key={opt.val}
                         type="button"
-                        onClick={() => item.setter(val)}
-                        className={`w-7 h-7 rounded-full border text-[11px] font-extrabold transition-all flex items-center justify-center ${
-                          val <= item.value
-                            ? 'bg-primary-container/10 border-primary-container text-primary-container'
-                            : 'border-border text-muted-text bg-white'
+                        onClick={() => item.setter(opt.val)}
+                        className={`w-9 h-9 rounded-full border text-base flex items-center justify-center transition-all duration-200 ${
+                          item.value === opt.val
+                            ? 'bg-[#F47C2B]/10 border-[#F47C2B] scale-105 shadow-sm'
+                            : 'border-[#E8E0D5]/50 bg-white hover:bg-[#FFFBF5]'
                         }`}
                       >
-                        {val}
+                        {opt.emoji}
                       </button>
                     ))}
                   </div>
@@ -953,45 +994,85 @@ export default function PlaceDetailScreen() {
               ))}
             </div>
 
-            {/* Review Comment */}
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-extrabold uppercase tracking-wider text-muted-text">
-                Your Review
-              </label>
+            {/* Review Comment Textarea */}
+            <div className="w-full">
               <textarea
                 required
-                rows={3}
-                placeholder="What did you like or dislike? Highlight the special taste..."
+                rows={4}
+                placeholder="Describe your experience..."
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
-                className="border border-border rounded-card p-3 text-xs font-semibold focus:outline-none focus:border-primary-container resize-none"
+                className="w-full border border-[#E8E0D5] rounded-[16px] p-4 text-xs font-semibold focus:outline-none focus:border-[#F47C2B] resize-none bg-white placeholder-[#C6B6A5] text-[#2C1810] shadow-sm leading-relaxed"
               />
             </div>
 
-            {/* Footer Buttons */}
-            <div className="flex items-center gap-3 pt-2 mt-1">
-              <button
-                type="button"
-                onClick={() => setShowReviewModal(false)}
-                className="flex-1 py-3 border border-border rounded-btn text-xs font-bold hover:bg-surface-container-low text-muted-text transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={submittingReview}
-                className="flex-1 py-3 bg-primary-container hover:bg-primary text-white rounded-btn text-xs font-bold shadow-sm transition-colors flex justify-center items-center gap-1.5"
-              >
-                {submittingReview ? (
-                  <>
-                    <Loader2 size={13} className="animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  "Post Review"
-                )}
-              </button>
+            {/* Add Photos Section */}
+            <div className="flex flex-col gap-2 w-full">
+              <span className="text-[11px] font-bold text-[#6B6B6B]">Add Photos</span>
+              
+              <div className="flex gap-3 overflow-x-auto no-scrollbar py-1">
+                {/* ADD BUTTON */}
+                <button
+                  type="button"
+                  onClick={handleAddMockPhoto}
+                  className="w-20 h-20 rounded-[16px] border border-dashed border-[#F47C2B]/35 bg-[#FFF0E2] hover:bg-[#FFE5CD] transition-colors flex flex-col items-center justify-center gap-1.5 flex-shrink-0"
+                >
+                  <div className="text-[#F47C2B] flex items-center justify-center relative">
+                    <Camera size={20} className="stroke-[2]" />
+                    <Plus size={10} className="absolute -bottom-1 -right-1 bg-[#FFF0E2] rounded-full stroke-[3]" />
+                  </div>
+                  <span className="text-[9px] font-extrabold text-[#F47C2B] tracking-wider uppercase">ADD</span>
+                </button>
+
+                {/* UPLOADED PHOTO THUMBNAILS */}
+                {reviewPhotos.map((photoUrl, index) => (
+                  <div key={index} className="relative w-20 h-20 rounded-[16px] overflow-hidden border border-[#E8E0D5] flex-shrink-0 shadow-sm">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photoUrl}
+                      alt={`Review upload ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemovePhoto(index)}
+                      className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-colors border border-white/20"
+                    >
+                      <X size={10} className="stroke-[3]" />
+                    </button>
+                  </div>
+                ))}
+
+                {/* DOTTED PLACEHOLDERS FOR AESTHETICS */}
+                {Array.from({ length: Math.max(0, 3 - reviewPhotos.length) }).map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className="w-20 h-20 rounded-[16px] border border-[#E8E0D5]/40 bg-white flex items-center justify-center text-[#C6B6A5]/55 flex-shrink-0"
+                  >
+                    <Image size={20} className="stroke-[1.5]" />
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Post Review Action Button */}
+            <button
+              type="submit"
+              disabled={submittingReview}
+              className="w-full h-12 bg-[#F47C2B] hover:bg-[#d8661e] active:scale-[0.98] transition-all text-white rounded-[24px] text-xs font-black shadow-md flex justify-center items-center gap-2 uppercase tracking-widest mt-2"
+            >
+              {submittingReview ? (
+                <>
+                  <Loader2 size={14} className="animate-spin" />
+                  Posting...
+                </>
+              ) : (
+                <>
+                  <span>Post Review</span>
+                  <Send size={12} className="stroke-[3] rotate-45 mt-[-1px] ml-1" />
+                </>
+              )}
+            </button>
           </form>
         </div>
       )}
