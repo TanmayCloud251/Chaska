@@ -1059,7 +1059,7 @@ export default function PlaceDetailScreen() {
             <button
               type="submit"
               disabled={submittingReview}
-              className="w-full h-12 bg-[#F47C2B] hover:bg-[#d8661e] active:scale-[0.98] transition-all text-white rounded-[24px] text-xs font-black shadow-md flex justify-center items-center gap-2 uppercase tracking-widest mt-2"
+              className="group w-full h-12 bg-primary-container hover:bg-primary active:scale-[0.98] hover:scale-[1.02] text-white rounded-btn shadow-md hover:shadow-lg text-sm font-bold flex justify-center items-center gap-2 transition-all duration-200 mt-2"
             >
               {submittingReview ? (
                 <>
@@ -1069,7 +1069,7 @@ export default function PlaceDetailScreen() {
               ) : (
                 <>
                   <span>Post Review</span>
-                  <Send size={12} className="stroke-[3] rotate-45 mt-[-1px] ml-1" />
+                  <Send size={13} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 mt-[-1px] ml-1" />
                 </>
               )}
             </button>
