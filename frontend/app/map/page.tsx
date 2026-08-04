@@ -202,7 +202,7 @@ export default function MapScreen() {
 
         {/* Small location label overlay */}
         <div className="absolute top-[65px] left-4 z-20 bg-black/60 backdrop-blur-[2px] text-white text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm pointer-events-none">
-          Rajnandgaon City Center
+          📍 Rajnandgaon City Center
         </div>
 
         {/* Interactive Leaflet Map */}
