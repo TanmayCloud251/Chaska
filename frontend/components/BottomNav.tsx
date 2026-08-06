@@ -30,7 +30,7 @@ export default function BottomNav() {
               href={item.href}
               className={`flex flex-col items-center gap-0.5 py-1 px-3 relative transition-all duration-200 ${
                 isActive 
-                  ? 'text-primary-container scale-102' 
+                  ? 'text-primary-container scale-[1.02]' 
                   : 'text-muted-text hover:text-foreground'
               }`}
             >
