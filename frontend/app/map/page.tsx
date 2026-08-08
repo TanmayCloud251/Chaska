@@ -166,7 +166,7 @@ export default function MapScreen() {
         {/* Location Pill */}
         <div className="flex items-center gap-1 bg-surface-container-low border border-border/30 px-3.5 py-1.5 rounded-full text-xs font-bold select-none shadow-sm">
           <MapPin size={12} className="text-primary" />
-          <span className="text-black">Rajnandgaon</span>
+          <span className="text-black">📍 Rajnandgaon</span>
         </div>
 
         {/* Avatar / Profile Trigger */}
