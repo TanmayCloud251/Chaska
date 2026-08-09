@@ -121,7 +121,7 @@ export default function FeedCard({ place }: FeedCardProps) {
         <div className="flex items-center justify-between gap-2 mt-2 pt-1">
           {/* Pricing Text */}
           <div className="text-xs font-medium text-muted-text select-none leading-[1.3]">
-            <div>{place.price_range || '₹'} • Under</div>
+            <div>{place.price_range || '₹'} • {place.category === 'chai' ? 'Chai' : place.category === 'snacks' ? 'Street Food' : place.category === 'smoking_allowed' ? 'Smoking Allowed' : 'Café'}</div>
             <div className="font-extrabold text-base text-foreground mt-0.5">₹{place.avg_price || 30}</div>
           </div>
           <div className="flex items-center gap-2">
