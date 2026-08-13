@@ -42,6 +42,13 @@ This document tracks completed screens, implemented features, and upcoming roadm
   - **Sync Filter Overlay**: Floating pill bar that filters active map markers on the fly.
   - **Details Drawer**: Slide-up bottom sheet showing selected vendor summaries.
 
+### 5. 🎛️ Shared Common Header Component (`components/Header.tsx`)
+- **Overview**: A unified client-side header mounted inside the root `layout.tsx` wrapper.
+- **Key Features**:
+  - **Dynamic Route Visibility**: Uses path analysis to restrict rendering to the Feed page (`/`) and Map page (`/map`), avoiding conflicts with detail page headers.
+  - **Location Pill**: Displays geographical indicators (Rajnandgaon) dynamically.
+  - **Account Controls**: Links to the user's profile dashboard or triggers the login sheet depending on session state.
+
 ---
 
 ## Roadmap: Remaining Screens
