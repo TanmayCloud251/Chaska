@@ -22,6 +22,7 @@ db_mock.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+memory.md
 
 # OS Files
 .DS_Store
