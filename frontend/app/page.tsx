@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '../lib/auth';
 import { api } from '../lib/api';
 import FeedCard from '../components/FeedCard';
-import { Search, MapPin, SlidersHorizontal, Plus, Loader2, X } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, Loader2, X } from 'lucide-react';
 
 export default function FeedScreen() {
   const { user, setLoginSheetOpen } = useAuth();
@@ -45,15 +45,15 @@ export default function FeedScreen() {
 
   // Client-side search and additional filtering (like price ranges)
   const filteredPlaces = places.filter(place => {
-    const matchesSearch = 
+    const matchesSearch =
       place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       place.area.toLowerCase().includes(searchQuery.toLowerCase());
-      
+
     const matchesPrice = priceFilter === 'all'
       ? true
-      : (place.avg_price 
-          ? place.avg_price <= parseInt(priceFilter, 10) 
-          : (priceFilter === '30' && (place.category === 'chai' || place.category === 'snacks')));
+      : (place.avg_price
+        ? place.avg_price <= parseInt(priceFilter, 10)
+        : (priceFilter === '30' && (place.category === 'chai' || place.category === 'snacks')));
 
     return matchesSearch && matchesPrice;
   });
@@ -68,45 +68,11 @@ export default function FeedScreen() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* 1. Sticky Top Bar */}
-      <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-md px-4 py-3 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-1.5 text-primary">
-          <span className="font-heading text-xl font-extrabold tracking-wide text-primary">Chaska</span>
-        </Link>
 
-        {/* Location Pill */}
-        <div className="flex items-center gap-1 bg-surface-container-low border border-border/30 px-3.5 py-1.5 rounded-full text-xs font-bold select-none shadow-sm">
-          <MapPin size={12} className="text-primary" />
-          <span className="text-black">📍 Rajnandgaon</span>
-        </div>
-
-        {/* Avatar / Profile Trigger */}
-        {user ? (
-          <Link 
-            href="/profile" 
-            className="w-9 h-9 rounded-full overflow-hidden border border-border shadow-sm hover:scale-105 transition-transform"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={user.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'} 
-              alt={user.name || 'User'} 
-              className="w-full h-full object-cover"
-            />
-          </Link>
-        ) : (
-          <button
-            onClick={() => setLoginSheetOpen(true)}
-            className="text-xs font-bold bg-primary text-white px-3.5 py-1.5 rounded-btn shadow-sm hover:bg-orange-600 transition-colors"
-          >
-            Log In
-          </button>
-        )}
-      </header>
 
       {/* Main Feed Content Area */}
       <div className="flex-1 p-4 flex flex-col gap-4">
-        
+
         {/* 2. Search Bar Layout */}
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-container" size={16} />
@@ -126,11 +92,10 @@ export default function FeedScreen() {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap border transition-all ${
-                  activeCategory === cat.id
+                className={`px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap border transition-all ${activeCategory === cat.id
                     ? 'bg-primary-container text-white border-primary-container shadow-sm'
                     : 'bg-white text-muted-text border-border hover:bg-surface-container-low/50'
-                }`}
+                  }`}
               >
                 {cat.label}
               </button>
@@ -140,9 +105,8 @@ export default function FeedScreen() {
           <div className="relative flex-shrink-0">
             <button
               onClick={() => setShowFilterModal(true)}
-              className={`w-11 h-11 border border-border rounded-card flex items-center justify-center transition-colors shadow-warm bg-white hover:bg-surface-container/20 ${
-                isAnyFilterActive ? 'text-primary border-primary/50' : 'text-foreground'
-              }`}
+              className={`w-11 h-11 border border-border rounded-card flex items-center justify-center transition-colors shadow-warm bg-white hover:bg-surface-container/20 ${isAnyFilterActive ? 'text-primary border-primary/50' : 'text-foreground'
+                }`}
               title="Filter items"
             >
               <SlidersHorizontal size={16} />
@@ -206,13 +170,13 @@ export default function FeedScreen() {
       {showFilterModal && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 backdrop-blur-sm transition-opacity duration-300">
           <div className="absolute inset-0" onClick={() => setShowFilterModal(false)}></div>
-          
+
           <div className="relative z-10 w-full max-w-md bg-white border-t border-border rounded-t-[24px] shadow-2xl p-6 max-h-[85vh] overflow-y-auto flex flex-col gap-5 text-foreground animate-in slide-in-from-bottom duration-250">
-            
+
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border/50 pb-3">
               <h3 className="font-heading text-lg font-bold text-foreground">Filters & Sort</h3>
-              <button 
+              <button
                 onClick={() => setShowFilterModal(false)}
                 className="p-1.5 rounded-full hover:bg-surface-container-low text-muted-text hover:text-foreground transition-colors"
               >
@@ -233,11 +197,10 @@ export default function FeedScreen() {
                     key={opt.id}
                     type="button"
                     onClick={() => setSortBy(opt.id)}
-                    className={`py-2 rounded-card border text-xs font-bold transition-all ${
-                      sortBy === opt.id
+                    className={`py-2 rounded-card border text-xs font-bold transition-all ${sortBy === opt.id
                         ? 'bg-primary-container/10 border-primary-container text-primary-container'
                         : 'border-border bg-white text-muted-text hover:bg-surface-container-low/30'
-                    }`}
+                      }`}
                   >
                     {opt.label}
                   </button>
@@ -251,11 +214,10 @@ export default function FeedScreen() {
               <button
                 type="button"
                 onClick={() => setOpenNow(!openNow)}
-                className={`w-full py-2.5 rounded-card border text-xs font-bold flex items-center justify-between px-4 transition-all ${
-                  openNow
+                className={`w-full py-2.5 rounded-card border text-xs font-bold flex items-center justify-between px-4 transition-all ${openNow
                     ? 'bg-primary-container/10 border-primary-container text-primary-container'
                     : 'border-border bg-white text-muted-text hover:bg-surface-container-low/30'
-                }`}
+                  }`}
               >
                 <span className="flex items-center gap-1.5">
                   <span className="text-status-open">●</span>
@@ -283,11 +245,10 @@ export default function FeedScreen() {
                       key={opt.id}
                       type="button"
                       onClick={() => setPriceFilter(opt.id)}
-                      className={`py-2 rounded-card border text-xs font-bold transition-all ${
-                        isActive
+                      className={`py-2 rounded-card border text-xs font-bold transition-all ${isActive
                           ? 'bg-primary-container/10 border-primary-container text-primary-container'
                           : 'border-border bg-white text-muted-text hover:bg-surface-container-low/30'
-                      }`}
+                        }`}
                     >
                       {opt.label}
                     </button>
@@ -313,11 +274,10 @@ export default function FeedScreen() {
                       key={cat.id}
                       type="button"
                       onClick={() => setActiveCategory(cat.id)}
-                      className={`py-2 px-3 rounded-card border text-xs font-bold transition-all text-left flex items-center justify-between ${
-                        isActive
+                      className={`py-2 px-3 rounded-card border text-xs font-bold transition-all text-left flex items-center justify-between ${isActive
                           ? 'bg-primary-container/10 border-primary-container text-primary-container'
                           : 'border-border bg-white text-muted-text hover:bg-surface-container-low/30'
-                      }`}
+                        }`}
                     >
                       <span>{cat.label}</span>
                       {isActive && <span className="text-primary-container">✓</span>}

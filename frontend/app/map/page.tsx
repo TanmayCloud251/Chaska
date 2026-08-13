@@ -7,7 +7,7 @@ import { useAuth } from '../../lib/auth';
 import { api } from '../../lib/api';
 import MapFilterPills from '../../components/MapFilterPills';
 import PlaceBottomSheet from '../../components/PlaceBottomSheet';
-import { MapPin, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 // Dynamically import Leaflet Map Component with SSR disabled to prevent "window is not defined" error
 const MapView = dynamic(
@@ -39,7 +39,7 @@ interface MapPlace {
 
 export default function MapScreen() {
   const { user, setLoginSheetOpen } = useAuth();
-  
+
   // Data State
   const [places, setPlaces] = useState<MapPlace[]>([]);
   const [loading, setLoading] = useState(true);
@@ -112,7 +112,7 @@ export default function MapScreen() {
   // Filter change handler with toast display if result is empty
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
-    
+
     // Check if any places match
     const filtered = places.filter(place => {
       if (filter === 'All') return true;
@@ -156,48 +156,14 @@ export default function MapScreen() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-80px)] overflow-hidden bg-[#FFFBF5]">
-      {/* 1. Sticky Top Bar */}
-      <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-md px-4 py-3 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-1.5 text-primary">
-          <span className="font-heading text-xl font-extrabold tracking-wide text-primary">Chaska</span>
-        </Link>
 
-        {/* Location Pill */}
-        <div className="flex items-center gap-1 bg-surface-container-low border border-border/30 px-3.5 py-1.5 rounded-full text-xs font-bold select-none shadow-sm">
-          <MapPin size={12} className="text-primary" />
-          <span className="text-black">📍 Rajnandgaon</span>
-        </div>
-
-        {/* Avatar / Profile Trigger */}
-        {user ? (
-          <Link 
-            href="/profile" 
-            className="w-9 h-9 rounded-full overflow-hidden border border-border shadow-sm hover:scale-105 transition-transform"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={user.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'} 
-              alt={user.name || 'User'} 
-              className="w-full h-full object-cover"
-            />
-          </Link>
-        ) : (
-          <button
-            onClick={() => setLoginSheetOpen(true)}
-            className="text-xs font-bold bg-primary text-white px-3.5 py-1.5 rounded-btn shadow-sm hover:bg-orange-600 transition-colors"
-          >
-            Log In
-          </button>
-        )}
-      </header>
 
       {/* 2. Map Container & Overlay Area */}
       <div className="flex-1 relative w-full h-full">
         {/* Floating Categories Bar overlayed on top of map */}
-        <MapFilterPills 
-          activeFilter={activeFilter} 
-          onFilterChange={handleFilterChange} 
+        <MapFilterPills
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
         />
 
         {/* Small location label overlay */}

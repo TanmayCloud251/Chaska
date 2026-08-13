@@ -3,6 +3,7 @@ import { Be_Vietnam_Pro, Nunito_Sans } from "next/font/google";
 import { AuthProvider } from "../lib/auth";
 import LoginSheet from "../components/LoginSheet";
 import BottomNav from "../components/BottomNav";
+import Header from "../components/Header";
 import "./globals.css";
 
 const beVietnam = Be_Vietnam_Pro({
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body className="font-body bg-background text-foreground min-h-screen antialiased">
         <AuthProvider>
           <main className="max-w-md mx-auto min-h-screen relative flex flex-col bg-background shadow-warm border-x border-border pb-20">
+            <Header />
             {children}
             <BottomNav />
           </main>
