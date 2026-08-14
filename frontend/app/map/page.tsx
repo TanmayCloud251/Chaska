@@ -7,7 +7,7 @@ import { useAuth } from '../../lib/auth';
 import { api } from '../../lib/api';
 import MapFilterPills from '../../components/MapFilterPills';
 import PlaceBottomSheet from '../../components/PlaceBottomSheet';
-import { Loader2 } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 
 // Dynamically import Leaflet Map Component with SSR disabled to prevent "window is not defined" error
 const MapView = dynamic(
@@ -47,6 +47,7 @@ export default function MapScreen() {
 
   // Filter & Bottom Sheet UI states
   const [activeFilter, setActiveFilter] = useState<string>('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlace, setSelectedPlace] = useState<MapPlace | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -142,8 +143,14 @@ export default function MapScreen() {
     }
   };
 
-  // Filter list of places based on activeFilter
+  // Filter list of places based on activeFilter and searchQuery
   const filteredPlaces = places.filter(place => {
+    const matchesSearch = 
+      place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      place.area.toLowerCase().includes(searchQuery.toLowerCase());
+
+    if (!matchesSearch) return false;
+
     if (activeFilter === 'All') return true;
     if (activeFilter === 'Open Now') return place.is_open;
     const categoryMap: Record<string, string> = {
@@ -156,9 +163,21 @@ export default function MapScreen() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-80px)] overflow-hidden bg-[#FFFBF5]">
+      {/* 2. Search Bar Layout (Static block matching feed screen formatting) */}
+      <div className="px-4 pt-3 pb-1.5 bg-[#FFFBF5] border-b border-[#E8E0D5]/20 flex flex-col">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-container" size={16} />
+          <input
+            type="text"
+            placeholder="Search for chai, snacks, cafes, or smoking spots..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full h-11 bg-white border border-border rounded-card pl-11 pr-4 text-xs font-semibold focus:outline-none focus:border-primary-container focus:ring-0 focus:border-2 shadow-warm placeholder-muted-text/80 text-foreground transition-all"
+          />
+        </div>
+      </div>
 
-
-      {/* 2. Map Container & Overlay Area */}
+      {/* 3. Map Container & Overlay Area */}
       <div className="flex-1 relative w-full h-full">
         {/* Floating Categories Bar overlayed on top of map */}
         <MapFilterPills
