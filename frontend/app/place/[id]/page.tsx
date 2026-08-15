@@ -23,7 +23,8 @@ import {
   Loader2,
   Camera,
   Image,
-  Send
+  Send,
+  Edit3
 } from 'lucide-react';
 
 export default function PlaceDetailScreen() {
@@ -865,14 +866,30 @@ export default function PlaceDetailScreen() {
 
       </div>
 
-      {/* 8. Sticky CTA Direction Footer */}
+      {/* 8. Sticky CTA Direction & Review Footer */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-t border-border/40 p-4 shadow-[0_-8px_24px_rgba(44,24,16,0.06)]">
-        <div className="max-w-md mx-auto">
+        <div className="max-w-md mx-auto flex gap-3">
+          {/* Write a Review Button */}
+          <button
+            onClick={() => {
+              if (!user) {
+                setLoginSheetOpen(true);
+              } else {
+                setShowReviewModal(true);
+              }
+            }}
+            className="flex-1 h-12 bg-white border border-primary-container text-primary hover:bg-surface-container-low/40 active:scale-[0.98] rounded-btn shadow-sm text-sm font-bold flex items-center justify-center gap-2 transition-all duration-200"
+          >
+            <Edit3 size={15} />
+            Write Review
+          </button>
+
+          {/* Take me there directions CTA */}
           <a
             href={navUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group w-full h-12 bg-primary-container hover:bg-primary active:scale-[0.98] hover:scale-[1.02] text-white rounded-btn shadow-md hover:shadow-lg text-sm font-bold flex items-center justify-center gap-1.5 transition-all duration-200"
+            className="group flex-1 h-12 bg-primary-container hover:bg-primary active:scale-[0.98] hover:scale-[1.02] text-white rounded-btn shadow-md hover:shadow-lg text-sm font-bold flex items-center justify-center gap-1.5 transition-all duration-200"
           >
             Take me there
             <span className="text-lg leading-none mt-[-1px] transition-transform duration-200 group-hover:translate-x-1">→</span>
