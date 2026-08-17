@@ -71,10 +71,9 @@ export default function PlaceBottomSheet({
   return (
     <div
       ref={sheetRef}
-      className="fixed bottom-[80px] left-0 right-0 z-[2000] w-full max-w-md mx-auto bg-[#FFFFFF] border-t border-[#E8E0D5] rounded-t-[24px] shadow-[0_-8px_30px_rgba(44,24,16,0.12)] p-4 pb-6 flex flex-col gap-3 transition-transform duration-300"
+      className="fixed bottom-[80px] left-0 right-0 z-[2000] w-full max-w-md mx-auto bg-white border-t border-border rounded-t-[24px] shadow-warm p-4 pb-6 flex flex-col gap-3 transition-transform duration-300 font-body"
       style={{
         height: '42%',
-        fontFamily: 'Nunito, sans-serif',
         transform: `translateY(${sheetOpen ? '0%' : '100%'})`,
       }}
     >
@@ -108,8 +107,7 @@ export default function PlaceBottomSheet({
             {/* Title block & Heart Save button */}
             <div className="flex justify-between items-start gap-2">
               <h3 
-                className="font-heading text-lg font-extrabold text-[#2C1810] leading-snug truncate"
-                style={{ fontFamily: 'Baloo 2, sans-serif' }}
+                className="font-heading text-lg font-extrabold text-foreground leading-snug truncate"
               >
                 {place.name}
               </h3>
@@ -117,40 +115,41 @@ export default function PlaceBottomSheet({
                 onClick={(e) => onToggleSave(place.id, e)}
                 className={`p-1.5 rounded-full border transition-transform flex-shrink-0 hover:scale-105 active:scale-95 ${
                   isSaved
-                    ? 'bg-[#F47C2B]/10 text-[#F47C2B] border-[#F47C2B]/20'
-                    : 'bg-white text-[#6B6B6B] border-[#E8E0D5]'
+                    ? 'bg-primary-container/10 text-primary-container border-primary-container/20'
+                    : 'bg-white text-muted-text border-border'
                 }`}
               >
-                <Heart size={16} className={isSaved ? 'fill-[#F47C2B] stroke-[#F47C2B]' : 'stroke-current'} />
+                <Heart size={16} className={isSaved ? 'fill-primary-container stroke-primary-container' : 'stroke-current'} />
               </button>
             </div>
-
+ 
             {/* Area */}
-            <p className="text-xs text-[#6B6B6B] mt-0.5">{place.area}, Rajnandgaon</p>
+            <p className="text-xs text-muted-text mt-0.5">{place.area}, Rajnandgaon</p>
 
             {/* Status indicators and Rating */}
             <div className="flex items-center gap-2 mt-2">
               {/* Rating */}
-              <div className="flex items-center gap-0.5 text-xs font-bold text-[#2C1810]">
-                <Star size={12} className="fill-[#F47C2B] stroke-[#F47C2B]" />
+              <div className="flex items-center gap-0.5 text-xs font-bold text-foreground">
+                <Star size={12} className="fill-primary-container stroke-primary-container" />
                 <span>{ratingVal > 0 ? ratingVal.toFixed(1) : 'New'}</span>
               </div>
-              <span className="text-[#E8E0D5] text-[10px]">•</span>
+              <span className="text-border text-[10px]">•</span>
               {/* Open tag */}
               <span
-                className="text-[10px] font-bold tracking-wide"
-                style={{ color: place.is_open ? '#2E7D32' : '#C62828' }}
+                className={`text-[10px] font-bold tracking-wide ${
+                  place.is_open ? 'text-status-open' : 'text-status-closed'
+                }`}
               >
                 ● {place.is_open ? 'OPEN NOW' : 'CLOSED NOW'}
               </span>
             </div>
-
+ 
             {/* Category Tags */}
             <div className="flex flex-wrap gap-1.5 mt-2">
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-[9px] font-bold text-[#2C1810] px-2 py-0.5 rounded-full border border-[#E8E0D5] bg-[#FFFBF5]"
+                  className="text-[9px] font-bold text-foreground px-2 py-0.5 rounded-full border border-border bg-surface-container-low/50"
                 >
                   {tag}
                 </span>
@@ -162,7 +161,7 @@ export default function PlaceBottomSheet({
           <div className="flex gap-2 mt-auto">
             <Link
               href={`/place/${place.id}`}
-              className="flex-1 text-center py-2.5 px-3 border border-[#F47C2B] text-[#F47C2B] hover:bg-[#FFFBF5] transition-colors rounded-[24px] text-xs font-bold shadow-sm active:scale-[0.98]"
+              className="flex-1 text-center py-2.5 px-3 border border-primary-container text-primary-container hover:bg-surface-container-low/40 transition-colors rounded-btn text-xs font-bold shadow-sm active:scale-[0.98]"
             >
               View Details
             </Link>
@@ -170,7 +169,7 @@ export default function PlaceBottomSheet({
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 text-center py-2.5 px-3 bg-[#F47C2B] hover:bg-[#d8661e] text-white transition-colors rounded-[24px] text-xs font-bold flex items-center justify-center gap-1 shadow-sm active:scale-[0.98]"
+              className="flex-1 text-center py-2.5 px-3 bg-primary-container hover:bg-primary text-white transition-colors rounded-btn text-xs font-bold flex items-center justify-center gap-1 shadow-sm active:scale-[0.98]"
             >
               <span>Take me there</span>
               <ArrowRight size={12} className="stroke-[3]" />
